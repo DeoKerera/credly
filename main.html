@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Credly — CCNA Badge</title>
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: Arial, Helvetica, sans-serif;
+    color: #222;
+    background: #fff;
+    font-size: 15px;
+  }
+
+  /* Top navigation */
+  .topbar {
+    height: 92px;
+    border-top: 1px solid #ddd;
+    border-bottom: 1px solid #cfcfcf;
+    box-shadow: 0 2px 4px rgba(0,0,0,.18);
+    display: flex;
+    align-items: center;
+    padding: 0 0;
+    background: #fff;
+  }
+  .nav {
+    width: 1130px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 26px;
+  }
+  .credly {
+    width: 92px;
+    flex: 0 0 92px;
+    color: #f26a21;
+    font-family: "Brush Script MT", "Segoe Script", cursive;
+    font-size: 38px;
+    line-height: 1;
+    font-weight: 700;
+    letter-spacing: -2px;
+    position: relative;
+    transform: rotate(-2deg);
+  }
+  .credly small {
+    position: absolute;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 6px;
+    letter-spacing: .3px;
+    color: #777;
+    font-weight: 500;
+    left: 28px;
+    bottom: -8px;
+    transform: rotate(2deg);
+  }
+
+  .search {
+    height: 48px;
+    width: 660px;
+    border: 1px solid #888;
+    border-radius: 25px;
+    display: flex;
+    align-items: center;
+    padding: 0 15px;
+    color: #687078;
+    font-size: 16px;
+  }
+  .search-icon {
+    width: 18px;
+    height: 18px;
+    border: 2px solid #60666b;
+    border-radius: 50%;
+    margin-right: 14px;
+    position: relative;
+  }
+  .search-icon::after {
+    content: "";
+    position: absolute;
+    width: 7px;
+    height: 2px;
+    background: #60666b;
+    right: -5px;
+    bottom: -3px;
+    transform: rotate(45deg);
+    border-radius: 2px;
+  }
+  .nav-spacer { flex: 1; }
+  .btn {
+    height: 52px;
+    padding: 0 23px;
+    border-radius: 3px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+  }
+  .create {
+    color: #005f58;
+    border: 2px solid #005f58;
+    background: white;
+  }
+  .signin {
+    color: white;
+    border: 2px solid #00675f;
+    background: #00675f;
+    margin-left: -8px;
+  }
+
+  /* Issued banner */
+  .issuer {
+    height: 126px;
+    background: #f0f0f0;
+  }
+  .issuer-inner {
+    width: 1130px;
+    height: 100%;
+    margin: auto;
+    display: flex;
+    align-items: center;
+  }
+  .avatar {
+    width: 88px;
+    height: 88px;
+    border: 1px solid #c9c9c9;
+    border-radius: 50%;
+    background: #fafafa;
+    margin-left: 0;
+    margin-right: 30px;
+    position: relative;
+  }
+  .avatar .head {
+    width: 21px;
+    height: 21px;
+    border: 3px solid #929292;
+    border-radius: 50%;
+    position: absolute;
+    top: 20px;
+    left: 31px;
+  }
+  .avatar .body {
+    width: 38px;
+    height: 23px;
+    border: 3px solid #929292;
+    border-radius: 22px 22px 9px 9px;
+    position: absolute;
+    bottom: 17px;
+    left: 24px;
+  }
+  .issuer-text { line-height: 1.9; }
+  .issuer-text .line1 { color: #333; }
+  .issuer-text a, .verify, .learn { color: #006c66; text-decoration: underline; font-weight: 600; }
+  .issuer-text .date { color: #333; }
+  .verify-area {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 13px;
+  }
+  .verify-badge {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: #006c66;
+    position: relative;
+  }
+  .verify-badge::after {
+    content: "✓";
+    color: white;
+    font-size: 10px;
+    position: absolute;
+    left: 3px;
+    top: 0px;
+    font-weight: 900;
+  }
+  .celebrate {
+    margin-left: 13px;
+    width: 146px;
+    height: 49px;
+    border: 2px solid #006c66;
+    border-radius: 3px;
+    background: white;
+    color: #006c66;
+    font-size: 15px;
+    font-weight: 700;
+  }
+
+  /* Main badge area */
+  .main {
+    width: 1130px;
+    margin: 0 auto;
+    min-height: 700px;
+    padding-top: 50px;
+  }
+  .badge-grid {
+    display: grid;
+    grid-template-columns: 360px 1fr;
+    column-gap: 38px;
+  }
+  .badge-art {
+    width: 330px;
+    height: 250px;
+    margin: 65px auto 0;
+    position: relative;
+  }
+
+  /* CSS recreation of the CCNA badge */
+  .badge-art .left-arc,
+  .badge-art .right-arc,
+  .badge-art .inner-left,
+  .badge-art .inner-right {
+    position: absolute;
+    border-style: solid;
+    border-top-color: transparent;
+    border-bottom-color: transparent;
+    border-radius: 50%;
+    transform: rotate(-23deg);
+  }
+  .badge-art .left-arc {
+    width: 160px; height: 210px; left: 48px; top: 15px;
+    border-width: 10px 0 10px 12px;
+    border-left-color: #007083;
+  }
+  .badge-art .right-arc {
+    width: 160px; height: 210px; right: 48px; top: 15px;
+    border-width: 10px 12px 10px 0;
+    border-right-color: #007083;
+  }
+  .badge-art .inner-left {
+    width: 142px; height: 185px; left: 61px; top: 28px;
+    border-width: 8px 0 8px 10px;
+    border-left-color: #007b91;
+  }
+  .badge-art .inner-right {
+    width: 142px; height: 185px; right: 61px; top: 28px;
+    border-width: 8px 10px 8px 0;
+    border-right-color: #007b91;
+  }
+  .badge-panel {
+    position: absolute;
+    left: 73px;
+    top: 37px;
+    width: 184px;
+    height: 157px;
+    background: white;
+    border-bottom: 4px solid #999;
+    clip-path: polygon(0 0,100% 0,100% 76%,78% 100%,22% 100%,0 76%);
+    text-align: center;
+    padding-top: 5px;
+  }
+  .badge-panel .cisco {
+    font-size: 27px;
+    font-weight: 500;
+    letter-spacing: 1px;
+    line-height: 1.02;
+  }
+  .badge-panel .cert {
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    margin-top: 2px;
+  }
+  .badge-panel .rule {
+    height: 3px;
+    background: #999;
+    width: 155px;
+    margin: 10px auto 4px;
+  }
+  .badge-panel .ccna {
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 58px;
+    line-height: 1;
+    letter-spacing: -3px;
+  }
+
+  .content h1 {
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 31px;
+    text-align: left;
+    margin: 0 0 18px;
+    font-weight: 500;
+  }
+  .issued-by {
+    font-size: 15px;
+    margin-bottom: 13px;
+  }
+  .issued-by a {
+    color: #006c66;
+    text-decoration: underline;
+    font-weight: 600;
+  }
+  .tags {
+    display: flex;
+    gap: 9px;
+    margin: 8px 0 29px;
+  }
+  .tag {
+    background: #f0f1f1;
+    padding: 9px 12px;
+    border-radius: 3px;
+    font-size: 13px;
+    color: #222;
+    white-space: nowrap;
+  }
+  .tag .icon { margin-right: 4px; }
+  .description {
+    font-size: 15px;
+    line-height: 1.65;
+    max-width: 720px;
+    margin-bottom: 27px;
+  }
+  .learn {
+    display: inline-block;
+    margin-bottom: 53px;
+  }
+  h2 {
+    font-size: 17px;
+    margin: 0 0 22px;
+  }
+  .criteria {
+    font-size: 15px;
+    line-height: 1.65;
+    padding-left: 20px;
+    max-width: 760px;
+    margin: 0 0 43px;
+  }
+  .criteria li { padding-left: 0; }
+  .external {
+    float: right;
+    color: #006c66;
+    font-size: 19px;
+    text-decoration: none;
+  }
+  .skills-title { margin-bottom: 18px; }
+  .skills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 11px;
+    max-width: 730px;
+  }
+  .skill {
+    border: 1px solid #858585;
+    border-radius: 3px;
+    padding: 10px 13px;
+    color: #006c66;
+    font-size: 13px;
+    background: #fff;
+  }
+
+  @media (max-width: 900px) {
+    .nav, .issuer-inner, .main { width: calc(100% - 40px); }
+    .search { flex: 1; width: auto; }
+    .badge-grid { grid-template-columns: 1fr; }
+    .badge-art { margin: 20px auto 35px; }
+    .content h1 { text-align: center; }
+    .issuer { height: auto; padding: 20px 0; }
+    .verify-area { margin-left: 20px; }
+  }
+  @media (max-width: 650px) {
+    .topbar { height: auto; padding: 14px 0; }
+    .nav { flex-wrap: wrap; gap: 12px; }
+    .search { order: 3; flex-basis: 100%; }
+    .nav-spacer { display: none; }
+    .issuer-inner { flex-wrap: wrap; gap: 15px; }
+    .avatar { margin-right: 10px; }
+    .verify-area { margin-left: 0; width: 100%; justify-content: flex-end; }
+    .main { padding-top: 25px; }
+    .tags { flex-wrap: wrap; }
+  }
+
+  /* Bottom section */
+  .bottom-section {
+    width: 100%;
+    border-top: 1px solid #e2e2e2;
+    background: #fff;
+    margin-top: 70px;
+  }
+
+  .bottom-inner {
+    width: 1130px;
+    margin: 0 auto;
+  }
+
+  .standards {
+    width: 715px;
+    margin-left: 370px;
+    padding-top: 45px;
+  }
+
+  .standards h2 {
+    font-size: 17px;
+    margin: 0 0 21px;
+  }
+
+  .standards a {
+    display: block;
+    color: #006c66;
+    text-decoration: underline;
+    font-size: 16px;
+    margin-bottom: 12px;
+  }
+
+  .standards p {
+    font-size: 15px;
+    line-height: 1.58;
+    margin: 0 0 33px;
+    color: #292929;
+  }
+
+  .related {
+    margin-top: 48px;
+  }
+
+  .related h2 {
+    text-align: center;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 24px;
+    margin: 0;
+    font-weight: 700;
+  }
+
+  .related-line {
+    width: 62px;
+    height: 4px;
+    background: #777;
+    margin: 19px auto 27px;
+  }
+
+  .related-grid {
+    border-top: 1px solid #e3e3e3;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .related-card {
+    min-height: 194px;
+    border-right: 1px solid #e5e5e5;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 25px 28px;
+    text-decoration: none;
+    color: #111;
+  }
+
+  .related-card:last-child {
+    border-right: 0;
+  }
+
+  .related-title {
+    font-size: 17px;
+    line-height: 1.42;
+  }
+
+  .related-badge {
+    flex: 0 0 106px;
+    width: 106px;
+    height: 108px;
+    border-radius: 6px;
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+  }
+
+  .level-badge {
+    background: #70c449;
+    color: white;
+    padding-top: 5px;
+  }
+
+  .level-badge strong {
+    display: block;
+    background: #03a9df;
+    font-size: 13px;
+    padding: 3px 2px;
+  }
+
+  .level-badge span {
+    display: block;
+    font-size: 12px;
+    margin-top: 6px;
+  }
+
+  .level-badge b {
+    display: block;
+    font-size: 42px;
+    line-height: 1;
+    font-weight: 300;
+  }
+
+  .level-badge small {
+    display: block;
+    font-size: 11px;
+    margin-top: 4px;
+  }
+
+  .academy-badge {
+    background: linear-gradient(160deg, #00a8e8, #36c9e9 52%, #087fc1);
+    color: white;
+    border: 2px solid #0a9ed0;
+    padding-top: 5px;
+  }
+
+  .academy-badge strong {
+    font-size: 13px;
+    margin-right: 3px;
+  }
+
+  .academy-badge span {
+    font-size: 8px;
+    display: inline-block;
+    line-height: 1;
+  }
+
+  .academy-badge em {
+    display: block;
+    background: #064c8b;
+    font-size: 9px;
+    font-style: normal;
+    text-align: left;
+    padding: 3px 8px;
+    margin-top: 4px;
+  }
+
+  .academy-badge small {
+    position: absolute;
+    bottom: 5px;
+    left: 4px;
+    right: 4px;
+    font-size: 6px;
+  }
+
+  .ccie-badge {
+    background: white;
+    color: #444;
+    border-radius: 0;
+    border-bottom: 5px solid #8b8b8b;
+    clip-path: polygon(10% 0,90% 0,100% 55%,83% 100%,17% 100%,0 55%);
+    padding-top: 7px;
+  }
+
+  .ccie-badge::before,
+  .ccie-badge::after {
+    content: "";
+    position: absolute;
+    top: 12px;
+    width: 34px;
+    height: 73px;
+    border: 5px solid #999;
+    border-top-color: transparent;
+    border-bottom-color: transparent;
+    border-radius: 50%;
+  }
+
+  .ccie-badge::before {
+    left: -8px;
+    transform: rotate(-15deg);
+  }
+
+  .ccie-badge::after {
+    right: -8px;
+    transform: rotate(15deg);
+  }
+
+  .ccie-badge strong {
+    display: block;
+    font-size: 12px;
+    letter-spacing: 1px;
+  }
+
+  .ccie-badge b {
+    display: block;
+    color: #d82c42;
+    font-size: 25px;
+    font-weight: 400;
+    border-top: 2px solid #999;
+    border-bottom: 2px solid #999;
+    margin: 3px 14px;
+  }
+
+  .ccie-badge span {
+    display: block;
+    font-size: 7px;
+    color: #007a8a;
+    font-weight: bold;
+  }
+
+  .ccie-badge small {
+    display: block;
+    font-size: 8px;
+    font-weight: bold;
+    color: #007a8a;
+  }
+
+  .footer {
+    border-top: 1px solid #cfcfcf;
+    height: 78px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 46px;
+  }
+
+  .footer-links {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 9px;
+    font-size: 13px;
+  }
+
+  .footer-links a {
+    color: #006c66;
+    text-decoration: none;
+  }
+
+  .footer-links i {
+    color: #aaa;
+    font-style: normal;
+  }
+
+  @media (max-width: 900px) {
+    .bottom-inner { width: calc(100% - 40px); }
+    .standards { width: auto; margin-left: 0; }
+    .related-grid { grid-template-columns: 1fr; }
+    .related-card { border-right: 0; border-bottom: 1px solid #e5e5e5; }
+    .related-card:last-child { border-bottom: 0; }
+  }
+
+  @media (max-width: 650px) {
+    .footer { height: auto; padding: 20px; }
+    .footer-links { line-height: 1.8; }
+  }
+
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <nav class="nav">
+    <div class="credly">Credly<small>by Pearson</small></div>
+    <div class="search">
+      <span class="search-icon"></span>
+      <span>Search by badge name, organization, skill, occupation or learning pathway</span>
+    </div>
+    <div class="nav-spacer"></div>
+    <button class="btn create">Create Account</button>
+    <button class="btn signin">Sign In</button>
+  </nav>
+</header>
+
+<section class="issuer">
+  <div class="issuer-inner">
+    <div class="avatar" aria-hidden="true">
+      <div class="head"></div>
+      <div class="body"></div>
+    </div>
+    <div class="issuer-text">
+      <div class="line1">This badge was issued to <a href="#">Kerera Deo</a></div>
+      <div class="date">Date issued: July 21, 2026 | Expires: July 21, 2029</div>
+    </div>
+    <div class="verify-area">
+      <span class="verify-badge"></span>
+      <a class="verify" href="#">Verify</a>
+      <button class="celebrate">♨ &nbsp; Celebrate</button>
+    </div>
+  </div>
+</section>
+
+<main class="main">
+  <div class="badge-grid">
+    <div class="badge-art" aria-label="Cisco CCNA badge illustration">
+      <div class="left-arc"></div>
+      <div class="right-arc"></div>
+      <div class="inner-left"></div>
+      <div class="inner-right"></div>
+      <div class="badge-panel">
+        <div class="cisco">CISCO</div>
+        <div class="cert">CERTIFIED</div>
+        <div class="rule"></div>
+        <div class="ccna">CCNA</div>
+      </div>
+    </div>
+
+    <section class="content">
+      <h1>CCNA</h1>
+      <div class="issued-by">Issued by <a href="#">Cisco</a></div>
+
+      <div class="tags">
+        <span class="tag">⚙ Certification</span>
+        <span class="tag">▤ Foundational</span>
+        <span class="tag">◷ Hours</span>
+        <span class="tag">$ Paid</span>
+      </div>
+
+      <p class="description">
+        Earners of Cisco CCNA - Implementing and Administering Cisco Solutions (CCNA)
+        have demonstrated knowledge and skills related to network fundamentals,
+        network access, IP connectivity, IP services, security fundamentals, and
+        automation and programmability.
+      </p>
+
+      <a class="learn" href="#">Learn more</a>
+
+      <h2>Certification Criteria</h2>
+      <ul class="criteria">
+        <li>
+          Pass the 120-minute proctored Cisco Certified Network Associate exam
+          (CCNA 200-301) which maps to the CCNA certification.
+          <a class="external" href="#" aria-label="Open certification exam information">↗</a>
+        </li>
+      </ul>
+
+      <h2 class="skills-title">Skills</h2>
+      <div class="skills">
+        <span class="skill">Access Connectivity</span>
+        <span class="skill">Architectures and Services</span>
+        <span class="skill">Assurance and Automation</span>
+        <span class="skill">Automation</span>
+        <span class="skill">Connectivity</span>
+        <span class="skill">Core Routing</span>
+        <span class="skill">High Availability and Fast Convergence</span>
+        <span class="skill">IP</span>
+        <span class="skill">IP services</span>
+        <span class="skill">Network Access</span>
+        <span class="skill">Network Fundamentals</span>
+        <span class="skill">Network Security</span>
+      </div>
+    </section>
+  </div>
+</main>
+
+
+<!-- Standards / Related / Footer section -->
+<section class="bottom-section">
+  <div class="bottom-inner">
+
+    <div class="standards">
+      <h2>Standards</h2>
+
+      <a href="#">Institute for Credentialing Excellence</a>
+      <p>
+        The Cisco Global Certification exams adhere to the standards provided by
+        the Institute for Credentialing Excellence.
+      </p>
+
+      <a href="#">ANSI National Accreditation Board</a>
+      <p>
+        The Cisco Global Certification exams adhere to the standards set forth by
+        the ANSI National Accreditation Board (ANAB), a non-governmental organization
+        that provides accreditation services and training to public- and private-sector
+        organizations, serving the global marketplace. Accreditation under this program
+        is based upon ISO/IEC 17024.
+      </p>
+    </div>
+
+    <div class="related">
+      <h2>Related</h2>
+      <div class="related-line"></div>
+
+      <div class="related-grid">
+        <a href="#" class="related-card">
+          <div class="related-badge level-badge">
+            <strong>Cisco Verified</strong>
+            <span>Level</span>
+            <b>200</b>
+            <small>Completed</small>
+          </div>
+          <div class="related-title">Implementing and<br>Administering<br>Cisco Solutions</div>
+        </a>
+
+        <a href="#" class="related-card">
+          <div class="related-badge academy-badge">
+            <strong>cisco</strong>
+            <span>Networking<br>Academy</span>
+            <em>Verified</em>
+            <small>CCNA: Introduction<br>to Networks</small>
+          </div>
+          <div class="related-title">CCNA: Introduction<br>to Networks</div>
+        </a>
+
+        <a href="#" class="related-card">
+          <div class="related-badge ccie-badge">
+            <strong>CISCO</strong>
+            <b>CCIE</b>
+            <span>LIFETIME</span>
+            <small>EMERITUS</small>
+          </div>
+          <div class="related-title">CCIE Lifetime<br>Emeritus - Service<br>Provider</div>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="footer-links">
+    <a href="#">Request Demo</a>
+    <i>|</i>
+    <a href="#">About Credly</a>
+    <i>|</i>
+    <a href="#">Terms</a>
+    <i>|</i>
+    <a href="#">Privacy</a>
+    <i>|</i>
+    <a href="#">Developers</a>
+    <i>|</i>
+    <a href="#">Support</a>
+    <i>|</i>
+    <a href="#">Cookies</a>
+    <i>|</i>
+    <a href="#">Do Not Sell My Personal Information</a>
+  </div>
+</footer>
+
+</body>
+</html>
